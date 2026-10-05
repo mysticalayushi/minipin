@@ -3,7 +3,16 @@
 A Pinterest-inspired image-sharing web app built with **Flask** and **SQLite**.
 Users can sign up, upload pins, organize them into boards, and discover content through search.
 
+## Screenshots
+
+### Home feed
 ![Home feed](screenshots/home.png)
+
+### Pin detail
+![Pin detail](screenshots/pin-detail.png)
+
+### Boards
+![Boards](screenshots/boards.png)
 
 ## Features
 
