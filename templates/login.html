@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-card">
+  <h2>Log in to MiniPin</h2>
+  <form method="POST">
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit" class="btn btn-red full">Log in</button>
+  </form>
+  <p class="alt">New here? <a href="{{ url_for('signup') }}">Sign up</a></p>
+</div>
+{% endblock %}

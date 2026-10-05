@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="profile-header">
+  <div class="avatar">{{ profile_user['username'][0]|upper }}</div>
+  <h1>{{ profile_user['username'] }}</h1>
+  <p class="muted">{{ profile_user['email'] if is_me else '' }}</p>
+
+  <div class="tabs">
+    <a href="{{ url_for('profile', username=profile_user['username']) }}"
+       class="{{ 'active' if tab == 'created' }}">Created</a>
+    <a href="{{ url_for('profile', username=profile_user['username'], tab='boards') }}"
+       class="{{ 'active' if tab == 'boards' }}">Boards</a>
+    {% if is_me %}
+      <a href="{{ url_for('profile', username=profile_user['username'], tab='saved') }}"
+         class="{{ 'active' if tab == 'saved' }}">Saved</a>
+    {% endif %}
+  </div>
+</div>
+
+{% if tab == 'boards' %}
+  {% if is_me %}
+    <form method="POST" action="{{ url_for('create_board') }}" class="new-board">
+      <input type="text" name="name" placeholder="New board name" maxlength="50" required>
+      <button class="btn btn-red">Create board</button>
+    </form>
+  {% endif %}
+
+  {% if boards %}
+    <div class="boards-grid">
+      {% for b in boards %}
+        <a class="board-card" href="{{ url_for('board_view', board_id=b['id']) }}">
+          {% if b['cover'] %}
+            <img src="{{ url_for('static', filename='uploads/' + b['cover']) }}" alt="">
+          {% else %}
+            <div class="cover-empty">📌</div>
+          {% endif %}
+          <p class="board-name">{{ b['name'] }}</p>
+          <p class="board-count">{{ b['pin_count'] }} pins</p>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">No boards yet.</p>
+  {% endif %}
+
+{% else %}
+  {% if pins %}
+    <div class="grid">
+      {% for pin in pins %}
+        {% include "_pin.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">Nothing here yet.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="detail">
+  <div class="detail-image">
+    <img src="{{ url_for('static', filename='uploads/' + pin['image']) }}" alt="{{ pin['title'] }}">
+  </div>
+
+  <div class="detail-info">
+    <h1>{{ pin['title'] }}</h1>
+    <p class="pin-user">
+      by <a href="{{ url_for('profile', username=pin['username']) }}">{{ pin['username'] }}</a>
+      · {{ pin['save_count'] }} saves
+    </p>
+
+    {% if pin['description'] %}
+      <p class="detail-desc">{{ pin['description'] }}</p>
+    {% endif %}
+
+    {% set tags = pin['tags']|taglist %}
+    {% if tags %}
+      <div class="tag-list">
+        {% for t in tags %}
+          <a class="tag" href="{{ url_for('index', q=t) }}">#{{ t }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="pin-actions detail-actions">
+      {% if session.get('user_id') %}
+        <form method="POST" action="{{ url_for('toggle_save', pin_id=pin['id']) }}">
+          {% if pin['saved'] %}
+            <button class="btn btn-dark">Saved ✓</button>
+          {% else %}
+            <button class="btn btn-red">Save</button>
+          {% endif %}
+        </form>
+
+        {% if pin['user_id'] == session['user_id'] %}
+          <form method="POST" action="{{ url_for('delete_pin', pin_id=pin['id']) }}"
+                onsubmit="return confirm('Delete this pin permanently?');">
+            <button class="btn btn-gray">🗑 Delete</button>
+          </form>
+        {% endif %}
+      {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-red">Log in to save</a>
+      {% endif %}
+    </div>
+
+    {% if session.get('user_id') %}
+      <div class="board-box">
+        <h3>Add to a board</h3>
+        <form method="POST" action="{{ url_for('add_to_board', pin_id=pin['id']) }}">
+          {% if my_boards %}
+            <select name="board_id">
+              <option value="">Choose a board…</option>
+              {% for b in my_boards %}
+                <option value="{{ b['id'] }}">{{ b['name'] }}</option>
+              {% endfor %}
+            </select>
+            <p class="or">or</p>
+          {% endif %}
+          <input type="text" name="new_board" placeholder="Create a new board" maxlength="50">
+          <button class="btn btn-red full">Add to board</button>
+        </form>
+
+        {% if in_boards %}
+          <p class="in-boards">
+            Already on:
+            {% for b in in_boards %}
+              <a href="{{ url_for('board_view', board_id=b['id']) }}">{{ b['name'] }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

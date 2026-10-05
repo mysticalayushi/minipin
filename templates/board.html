@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="profile-header">
+  <h1>{{ board['name'] }}</h1>
+  <p class="muted">
+    A board by <a href="{{ url_for('profile', username=board['username'], tab='boards') }}"><strong>{{ board['username'] }}</strong></a>
+    · {{ pins|length }} pins
+  </p>
+
+  {% if is_owner %}
+    <form method="POST" action="{{ url_for('delete_board', board_id=board['id']) }}"
+          onsubmit="return confirm('Delete this board? Your pins will not be deleted.');"
+          style="margin-top:12px;">
+      <button class="btn btn-gray small">Delete board</button>
+    </form>
+  {% endif %}
+</div>
+
+{% if pins %}
+  <div class="grid">
+    {% for pin in pins %}
+      {% include "_pin.html" %}
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="empty">This board is empty. Open any pin and use "Add to a board".</p>
+{% endif %}
+{% endblock %}

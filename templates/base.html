@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MiniPin</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="{{ url_for('index') }}" class="logo">📌 MiniPin</a>
+
+    <form class="search" action="{{ url_for('index') }}" method="GET">
+      <input type="text" name="q" placeholder="Search by title, tag or description"
+       value="{{ request.args.get('q', '') }}">
+    </form>
+
+    <div class="nav-links">
+      {% if session.get('username') %}
+        <a href="{{ url_for('create') }}">Create</a>
+        <a href="{{ url_for('profile', username=session['username']) }}">{{ session['username'] }}</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-gray">Log out</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-red">Log in</a>
+        <a href="{{ url_for('signup') }}" class="btn btn-gray">Sign up</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash">
+        {% for m in messages %}<p>{{ m }}</p>{% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main>{% block content %}{% endblock %}</main>
+</body>
+</html>

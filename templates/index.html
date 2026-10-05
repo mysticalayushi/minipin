@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+  {% if q %}
+    <p class="search-info">Results for "<strong>{{ q }}</strong>" · <a href="{{ url_for('index') }}">clear</a></p>
+  {% endif %}
+
+  {% if pins %}
+    <div class="grid">
+      {% for pin in pins %}
+        {% include "_pin.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">
+      {% if q %}No pins found for that search.{% else %}No pins yet. Log in and create the first one!{% endif %}
+    </p>
+  {% endif %}
+{% endblock %}

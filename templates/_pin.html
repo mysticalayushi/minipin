@@ -1,0 +1,37 @@
+<div class="pin">
+  <a href="{{ url_for('pin_detail', pin_id=pin['id']) }}">
+    <img src="{{ url_for('static', filename='uploads/' + pin['image']) }}" alt="{{ pin['title'] }}">
+  </a>
+  <div class="pin-info">
+    <a href="{{ url_for('pin_detail', pin_id=pin['id']) }}" class="pin-title">{{ pin['title'] }}</a>
+    <p class="pin-user">
+      by <a href="{{ url_for('profile', username=pin['username']) }}">{{ pin['username'] }}</a>
+      · {{ pin['save_count'] }} saves
+    </p>
+
+    <div class="pin-actions">
+      {% if session.get('user_id') %}
+        <form method="POST" action="{{ url_for('toggle_save', pin_id=pin['id']) }}">
+          {% if pin['saved'] %}
+            <button class="btn btn-dark small">Saved ✓</button>
+          {% else %}
+            <button class="btn btn-red small">Save</button>
+          {% endif %}
+        </form>
+
+        {% if current_board %}
+          <form method="POST" action="{{ url_for('remove_from_board', board_id=current_board['id'], pin_id=pin['id']) }}">
+            <button class="btn btn-gray small">Remove</button>
+          </form>
+        {% elif pin['user_id'] == session['user_id'] %}
+          <form method="POST" action="{{ url_for('delete_pin', pin_id=pin['id']) }}"
+                onsubmit="return confirm('Delete this pin permanently?');">
+            <button class="btn btn-gray small">🗑 Delete</button>
+          </form>
+        {% endif %}
+      {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-red small">Save</a>
+      {% endif %}
+    </div>
+  </div>
+</div>

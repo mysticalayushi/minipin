@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-card">
+  <h2>Create a Pin</h2>
+  <form method="POST" enctype="multipart/form-data">
+    <input type="text" name="title" placeholder="Add a title" required>
+    <textarea name="description" placeholder="Tell everyone what your pin is about" maxlength="500"></textarea>
+    <input type="text" name="tags" placeholder="Tags, separated by commas (e.g. travel, food)">
+    <input type="file" name="image" accept="image/*" required>
+    <button type="submit" class="btn btn-red full">Publish</button>
+  </form>
+</div>
+{% endblock %}

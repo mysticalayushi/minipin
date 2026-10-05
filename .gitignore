@@ -1,0 +1,26 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Database (contains user data and password hashes)
+*.db
+*.sqlite3
+
+# User uploads (keep the folder, ignore the images)
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Secrets
+.env
+
+# Editor / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
