@@ -35,6 +35,12 @@ Users can sign up, upload pins, organize them into boards, and discover content 
 | Frontend | HTML, Jinja2 templates, CSS |
 | Security | Werkzeug password hashing, session cookies, parameterized SQL queries |
 
+## Prerequisites
+
+- Python 3.10+
+- pip
+- Git
+
 ## Project Structure
 
 ```
@@ -86,12 +92,41 @@ python app.py
 ```
 Open **http://127.0.0.1:5000** in your browser. The database (`minipin.db`) and the uploads folder are created automatically on first run.
 
-### Optional environment variables
+## Deployment
+
+MiniPin is deployed using [Render](https://render.com).
+
+### Deploy on Render
+
+1. Push the project to GitHub.
+2. Sign in to [Render](https://render.com) and create a new **Web Service**.
+3. Connect the MiniPin GitHub repository.
+4. Configure the following settings:
+
+| Setting | Value |
+|---|---|
+| Runtime | Python 3 |
+| Build Command | `pip install -r requirements.txt` |
+| Start Command | `gunicorn app:app` |
+
+5. Add the following environment variable in Render:
+
+| Variable | Value |
+|---|---|
+| `SECRET_KEY` | A secure, randomly generated secret key |
+
+6. Click **Create Web Service** to deploy the application.
+
+Render will generate a public URL through which users can access MiniPin.
+
+**Note:** Render's default filesystem is ephemeral. Persistent storage must be configured for the SQLite database and uploaded images to prevent data loss after restarts or redeployments.
+
+### Optional Environment Variables
 
 | Variable | Purpose |
 |---|---|
-| `SECRET_KEY` | Signs session cookies. Set a long random value in production. |
-| `FLASK_DEBUG` | Set to `1` to enable debug mode during development. |
+| `SECRET_KEY` | Signs Flask session cookies. Set a strong, random value in production. |
+| `FLASK_DEBUG` | Set to `1` to enable debug mode during development. Keep disabled in production. |
 
 ## Database Schema
 
@@ -108,7 +143,7 @@ Open **http://127.0.0.1:5000** in your browser. The database (`minipin.db`) and 
 - [ ] Infinite scroll
 - [ ] "Picked for you" feed using TF-IDF + cosine similarity
 - [ ] CSRF protection (Flask-WTF)
-- [ ] Deployment
+- [x] Deployment on Render
 
 ## Notes
 
